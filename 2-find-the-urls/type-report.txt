@@ -1,0 +1,10 @@
+3 ms: 4/29/2020, 1:29:41 PM
+8 ms: fetching https://pokeapi.co/api/v2/_ ...
+137 ms: ...
+149 ms: testing response ...
+151 ms: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at  [ ... ] /type.js:44:12
+    at processTicksAndRejections (internal/process/task_queues.js:85:5)
