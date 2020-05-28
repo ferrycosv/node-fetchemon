@@ -47,9 +47,11 @@ log((new Date()).toLocaleString());
 // --- begin main script ---
 
 
-const URL = 'https://pokeapi.co/api/v2/_';
+const URL = "https://pokeapi.co/api/v2/move/319/";
 
-
+/*
+["https://pokeapi.co/api/v2/move/103/", "https://pokeapi.co/api/v2/move/319/"]
+*/
 
 (async () => {
   try {

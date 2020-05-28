@@ -48,4 +48,70 @@ log((new Date()).toLocaleString());
 
 // the pokemon who's previous evolution is "Meowth"
 
+// Find the answer
 
+async function searchAPI() {
+  let URL = "https://pokeapi.co/api/v2/pokemon/";
+  let answer = [];
+  while (URL) {
+    try {
+      const res = await nodeFetch(URL);
+      const data = await res.json();
+      answer = answer.concat(await search(data.results.map((x) => x.url)));
+      URL = data.next;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  return answer[0];
+}
+
+async function search(itemsArr) {
+  const x = await Promise.all(
+    itemsArr.map(async (y) => {
+      try {
+        const res2 = await nodeFetch(y);
+        const data2 = await res2.json();
+        //asserts to pass
+        try {
+        assert.strictEqual(data2.name, "meowth");
+        } catch (err) {
+          return null;
+        }
+        return `https://pokeapi.co/api/v2/pokemon/${data2.id + 1}`;
+      } catch (err) {
+        console.log(err);
+      }
+    })
+  );
+  return [...new Set(x.filter(Boolean))];
+}
+
+const main = async () => {
+  try {
+    const URL = await searchAPI();
+    log("fetching " + URL + " ...");
+    const dotDotDot = setInterval(() => log("..."), 100);
+    const res = await nodeFetch(URL);
+    clearInterval(dotDotDot);
+    log("testing response ...");
+    assert.strictEqual(res.ok, true);
+    assert.strictEqual(res.status, 200);
+    log("parsing response ...");
+    const data = await res.json();
+    log("testing data ...");
+    assert.strictEqual(data.name, "persian");
+    assert.strictEqual(data.weight, 320);
+    assert.deepStrictEqual(data.species, {
+      name: "persian",
+      url: "https://pokeapi.co/api/v2/pokemon-species/53/"
+  });
+  assert.strictEqual(data.base_experience, 154);
+  assert.strictEqual(data.order, 82);
+  log("... PASS!");
+  } catch (err) {
+    log(err.stack);
+  }
+};
+
+main();
